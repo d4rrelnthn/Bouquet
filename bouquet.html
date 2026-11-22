@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I’m proud of you sweetie</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#fde8ec; --bg2:#fbd3dc; --ink:#7a2e48; --sub:#a35a72;
+  --stem:#4f8a5b; --leaf:#6aa874; --paper:#f6e3c8; --paper2:#e9c9a0; --ribbon:#d9486f;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg1:#2a1220; --bg2:#401a30; --ink:#ffd9e3; --sub:#e5a3b9;
+    --stem:#5fa36c; --leaf:#7bbd86; --paper:#e8d2b3; --paper2:#cfae82; --ribbon:#f0668a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg1:#2a1220; --bg2:#401a30; --ink:#ffd9e3; --sub:#e5a3b9;
+  --stem:#5fa36c; --leaf:#7bbd86; --paper:#e8d2b3; --paper2:#cfae82; --ribbon:#f0668a;
+  color-scheme:dark;
+}
+html,body{height:100%;margin:0}
+body{
+  background:radial-gradient(ellipse at 50% 30%,var(--bg1),var(--bg2));
+  color:var(--ink); font-family:"Caveat","Segoe Script","Comic Sans MS",cursive;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  overflow:hidden; text-align:center; padding:12px; cursor:pointer;
+}
+svg{width:min(88vw,430px); max-height:62vh; height:auto; overflow:visible}
+.stem{fill:none;stroke:var(--stem);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:grow 1.4s ease-out forwards}
+.leaf{fill:var(--leaf);transform-box:fill-box;transform-origin:0% 100%;transform:scale(0);animation:pop .8s ease-out forwards}
+.flower{transform-box:fill-box;transform-origin:center;transform:scale(0) rotate(-40deg);animation:bloom 1.1s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes grow{to{stroke-dashoffset:0}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes bloom{to{transform:scale(1) rotate(0)}}
+h1{font-size:clamp(2.2rem,9vw,3.6rem);line-height:1.05;margin:.3em 0 0;font-weight:700;
+  opacity:0;transform:translateY(10px);animation:show 1.4s ease-out 2.6s forwards}
+p{margin:.3em 0 0;font-size:1.25rem;color:var(--sub);opacity:0;animation:show 1s ease-out 3.4s forwards}
+@keyframes show{to{opacity:1;transform:none}}
+.heart{display:inline-block;animation:beat 1.4s ease-in-out 3.6s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01s!important;animation-delay:0s!important}
+}
+</style>
+</head>
+<body>
+<svg id="b" viewBox="0 0 400 440" role="img" aria-label="Buket bunga warna-warni"></svg>
+<h1>I’m proud of you sweetie <span class="heart" aria-hidden="true">♥</span></h1>
+<p>ketuk di mana saja untuk melihat bunganya mekar lagi</p>
+
+<script>
+(function(){
+  var NS="http://www.w3.org/2000/svg", svg=document.getElementById("b");
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+  function build(){
+    svg.innerHTML="";
+    var root={x:200,y:330};
+    // [x, y, radius, petals, petal color, inner color, center color]
+    var F=[
+      [200,70,40,10,"#f06a8d","#ff9bb4","#ffd45e"],
+      [120,120,34,9,"#ffb36b","#ffd2a1","#8a4b2a"],
+      [280,120,34,9,"#b88cf0","#d8bcff","#ffe27a"],
+      [70,200,30,8,"#ff8fa8","#ffc2d0","#ffd45e"],
+      [330,200,30,8,"#fff1e0","#ffd9e3","#f2a93b"],
+      [160,170,36,12,"#e0457a","#f58ab0","#ffd45e"],
+      [245,175,34,10,"#ffd24d","#ffe99a","#8a4b2a"],
+      [200,235,32,9,"#ff7d6b","#ffb0a3","#ffe27a"]
+    ];
+    var d=0;
+    // stems + leaves
+    F.forEach(function(f,i){
+      var mx=(f[0]+root.x)/2+(f[0]<200?-14:14), my=(f[1]+root.y)/2+10;
+      el("path",{d:"M"+root.x+" "+root.y+" Q"+mx+" "+my+" "+f[0]+" "+(f[1]+f[2]*.6),"class":"stem",pathLength:1,style:"animation-delay:"+(i*.12)+"s"});
+    });
+    [[110,250,-30],[290,250,30],[150,280,-60],[250,285,60],[200,290,0]].forEach(function(l,i){
+      var s=l[2]<0?-1:1;
+      el("path",{d:"M0 0 C"+(s*22)+" -26 "+(s*52)+" -22 "+(s*64)+" -52 C"+(s*30)+" -48 "+(s*6)+" -30 0 0Z","class":"leaf",
+        transform:"translate("+l[0]+" "+l[1]+") rotate("+l[2]*.5+")",style:"animation-delay:"+(.9+i*.12)+"s"});
+    });
+    // flowers
+    F.forEach(function(f,i){
+      var g=el("g",{"class":"flower",style:"animation-delay:"+(1.1+i*.18)+"s"});
+      var t=el("g",{transform:"translate("+f[0]+" "+f[1]+")"},g);
+      [[1,f[4],0],[.66,f[5],180/f[3]]].forEach(function(L){
+        for(var k=0;k<f[3];k++){
+          el("ellipse",{cx:0,cy:-f[2]*L[0]*.62,rx:f[2]*L[0]*.34,ry:f[2]*L[0]*.55,fill:L[1],
+            transform:"rotate("+(k*360/f[3]+L[2])+")",opacity:L[0]==1?1:.95},t);
+        }
+      });
+      el("circle",{r:f[2]*.24,fill:f[6]},t);
+    });
+    // wrapping paper
+    el("path",{d:"M95 318 L305 318 L222 428 Q200 438 178 428 Z",fill:"var(--paper)"});
+    el("path",{d:"M95 318 L200 345 L178 428 Z",fill:"var(--paper2)",opacity:.75});
+    el("path",{d:"M305 318 L200 345 L222 428 Z",fill:"var(--paper2)",opacity:.45});
+    el("path",{d:"M95 318 Q200 352 305 318",fill:"none",stroke:"var(--paper2)","stroke-width":3});
+    // ribbon bow
+    var bw=el("g",{transform:"translate(200 352)"});
+    el("path",{d:"M0 0 C-36 -26 -46 8 -10 12 Z",fill:"var(--ribbon)"},bw);
+    el("path",{d:"M0 0 C36 -26 46 8 10 12 Z",fill:"var(--ribbon)"},bw);
+    el("path",{d:"M-4 8 L-24 44 L-10 40 L-4 52 L2 10Z",fill:"var(--ribbon)",opacity:.85},bw);
+    el("path",{d:"M4 8 L24 44 L10 40 L4 52 L-2 10Z",fill:"var(--ribbon)",opacity:.85},bw);
+    el("circle",{cx:0,cy:5,r:9,fill:"var(--ribbon)"},bw);
+  }
+  function replay(){
+    build();
+    document.querySelectorAll("h1,p,.heart").forEach(function(n){
+      n.style.animation="none"; void n.offsetWidth; n.style.animation="";
+    });
+  }
+  build();
+  document.body.addEventListener("click",replay);
+})();
+</script>
+</body>
+</html>
